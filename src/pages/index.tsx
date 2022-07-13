@@ -7,6 +7,7 @@ import {
     XIcon,
 } from "@heroicons/react/outline";
 import Link from "next/link";
+import AddProductModal from "../common/components/Modal";
 
 export interface User {
     email: string;
@@ -275,6 +276,8 @@ function classNames(...classes: string[]) {
 
 export default function Home() {
     const [open, setOpen] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
+
     const [user, setUser] = useState<User>({
         email: "",
     });
@@ -294,9 +297,16 @@ export default function Home() {
         localStorage.clear();
         setUser({ email: "" });
     };
+    const openAddProductModal = (event: MouseEvent<Element>): void => {
+        setOpenModal(true);
+    };
 
     return (
         <div className="bg-white">
+            <AddProductModal
+                openModal={openModal}
+                setOpenModal={(value) => setOpenModal(value)}
+            ></AddProductModal>
             {/* Mobile menu */}
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
@@ -645,6 +655,12 @@ export default function Home() {
                                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                                     {user.email ? (
                                         <>
+                                            <button
+                                                onClick={openAddProductModal}
+                                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-sm font-medium bg-gray-700 text-white hover:bg-gray-800"
+                                            >
+                                                Add Product
+                                            </button>
                                             <span className="text-sm font-medium text-gray-700">
                                                 {user.email}
                                             </span>
