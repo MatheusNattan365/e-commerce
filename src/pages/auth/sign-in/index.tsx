@@ -3,16 +3,16 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FormEvent } from "react";
-import { login } from "../../../services/Auth";
+import { signIn } from "../../../services/Auth";
 
-export interface LoginForm {
+export interface UserForm {
     email: string;
     password: string;
 }
 
 const SignIn: NextPage = () => {
     const router = useRouter();
-    const [form, setForm] = React.useState<LoginForm>({
+    const [form, setForm] = React.useState<UserForm>({
         email: "",
         password: "",
     });
@@ -21,7 +21,7 @@ const SignIn: NextPage = () => {
         event: FormEvent<Element>
     ): Promise<void> => {
         event.preventDefault();
-        const successLogin = await login(form);
+        const successLogin = await signIn(form);
 
         if (successLogin) router.push("/");
     };

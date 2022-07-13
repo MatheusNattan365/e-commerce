@@ -1,8 +1,27 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { FormEvent } from "react";
+import { signUp } from "../../../services/Auth";
+import { UserForm } from "../sign-in";
 
 const SignUp: NextPage = () => {
+    const router = useRouter();
+    const [form, setForm] = React.useState<UserForm>({
+        email: "",
+        password: "",
+    });
+
+    const handleFormSubmit = async (
+        event: FormEvent<Element>
+    ): Promise<void> => {
+        event.preventDefault();
+        const successSignUp = await signUp(form);
+
+        if (successSignUp) router.push("/auth/sign-in");
+    };
+
     return (
         <>
             <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -17,7 +36,12 @@ const SignUp: NextPage = () => {
                             Create your account
                         </h2>
                     </div>
-                    <form className="mt-8 space-y-6" action="#" method="POST">
+                    <form
+                        className="mt-8 space-y-6"
+                        action="#"
+                        method="POST"
+                        onSubmit={handleFormSubmit}
+                    >
                         <input
                             type="hidden"
                             name="remember"
@@ -39,6 +63,13 @@ const SignUp: NextPage = () => {
                                     required
                                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                     placeholder="Email address"
+                                    value={form.email}
+                                    onChange={(event) =>
+                                        setForm({
+                                            ...form,
+                                            email: event.target.value,
+                                        })
+                                    }
                                 />
                             </div>
                             <div>
@@ -53,6 +84,13 @@ const SignUp: NextPage = () => {
                                     required
                                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                     placeholder="Password"
+                                    value={form.password}
+                                    onChange={(event) =>
+                                        setForm({
+                                            ...form,
+                                            password: event.target.value,
+                                        })
+                                    }
                                 />
                             </div>
                         </div>
