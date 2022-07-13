@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import React, { Fragment, MouseEvent, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
     MenuIcon,
@@ -7,6 +7,10 @@ import {
     XIcon,
 } from "@heroicons/react/outline";
 import Link from "next/link";
+
+export interface User {
+    email: string;
+}
 
 const navigation = {
     categories: [
@@ -271,6 +275,25 @@ function classNames(...classes: string[]) {
 
 export default function Home() {
     const [open, setOpen] = useState(false);
+    const [user, setUser] = useState<User>({
+        email: "",
+    });
+
+    React.useEffect(() => {
+        hasUser();
+    }, []);
+
+    const hasUser = () => {
+        const user = JSON.parse(
+            localStorage.getItem("devx-user") || JSON.stringify("")
+        );
+        if (user.email) setUser({ email: user.email });
+    };
+
+    const handleLogout = (event: MouseEvent<Element>): void => {
+        localStorage.clear();
+        setUser({ email: "" });
+    };
 
     return (
         <div className="bg-white">
@@ -620,26 +643,42 @@ export default function Home() {
 
                             <div className="ml-auto flex items-center">
                                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                                    <Link href={"/auth/sign-in"}>
-                                        <a
-                                            href="#"
-                                            className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                                        >
-                                            Sign in
-                                        </a>
-                                    </Link>
-                                    <Link href={"/auth/sign-up"}>
-                                        <a
-                                            href="#"
-                                            className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                                        >
-                                            <span
-                                                className="h-6 w-px bg-gray-200"
-                                                aria-hidden="true"
-                                            />
-                                            Create account
-                                        </a>
-                                    </Link>
+                                    {user.email ? (
+                                        <>
+                                            <span className="text-sm font-medium text-gray-700">
+                                                {user.email}
+                                            </span>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                                            >
+                                                Logout
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Link href={"/auth/sign-in"}>
+                                                <a
+                                                    href="#"
+                                                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                                                >
+                                                    Sign in
+                                                </a>
+                                            </Link>
+                                            <Link href={"/auth/sign-up"}>
+                                                <a
+                                                    href="#"
+                                                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                                                >
+                                                    <span
+                                                        className="h-6 w-px bg-gray-200"
+                                                        aria-hidden="true"
+                                                    />
+                                                    Create account
+                                                </a>
+                                            </Link>
+                                        </>
+                                    )}
                                 </div>
 
                                 <div className="hidden lg:ml-8 lg:flex">

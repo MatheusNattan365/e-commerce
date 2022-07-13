@@ -12,7 +12,8 @@ export async function login(login: LoginForm): Promise<boolean> {
                 alert(res.issue);
                 return false;
             }
-            localStorage.setItem("devx-user-token", res);
+            localStorage.setItem("devx-user", JSON.stringify(res.user));
+            localStorage.setItem("devx-token", res.jwt);
             return true;
         })
         .catch((err) => {
