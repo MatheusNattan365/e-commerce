@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Popover, Transition } from "@headlessui/react";
 import {
     MenuIcon,
@@ -7,25 +8,13 @@ import {
 import Link from "next/link";
 import React, { Fragment, MouseEvent, useContext, useState } from "react";
 import AddProductModal from "../common/components/Modal";
+import { ProductForm } from "../common/components/ProductForm";
 import { Context } from "../context/main";
 import { getAllMyProducts, getAllProducts } from "../services/Products";
 
 export interface User {
     email: string;
 }
-
-const navigation = {
-    categories: [
-        {
-            id: "products",
-            name: "Products",
-        },
-        {
-            id: "myProducts",
-            name: "My products",
-        },
-    ],
-};
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -39,8 +28,17 @@ export interface Product {
     thumbnailUrls: string[];
 }
 const Main = () => {
-    const [open, setOpen] = useState(true);
-    const [openModal, setOpenModal] = useState(false);
+    const [open, setOpen] = useState<boolean>(true);
+
+    const [openModal, setOpenModal] = useState<boolean>(false);
+    const [navigation, setNavigation] = useState({
+        categories: [
+            {
+                id: "products",
+                name: "Products",
+            },
+        ],
+    });
     const [products, setProducts] = useContext(Context);
     const [user, setUser] = useState<User>({
         email: "",
@@ -50,15 +48,46 @@ const Main = () => {
         const user = JSON.parse(
             localStorage.getItem("devx-user") || JSON.stringify("")
         );
-        if (user.email) setUser({ email: user.email });
+        const hasMyProductsTab = navigation.categories
+            .map((el) => el.id)
+            .includes("myProducts");
+
+        if (user.email) {
+            setUser({ email: user.email });
+
+            if (!hasMyProductsTab) {
+                setNavigation({
+                    categories: [
+                        ...navigation.categories,
+                        {
+                            id: "myProducts",
+                            name: "My products",
+                        },
+                    ],
+                });
+            }
+        } else {
+            if (hasMyProductsTab) {
+                setNavigation({
+                    categories: [
+                        {
+                            id: "products",
+                            name: "Products",
+                        },
+                    ],
+                });
+            }
+        }
     };
 
     const handleLogout = (event: MouseEvent<Element>): void => {
         localStorage.clear();
         setUser({ email: "" });
+        hasUser();
     };
 
     const openAddProductModal = (event: MouseEvent<Element>): void => {
+        setProducts({ ...products, selectedProduct: undefined });
         setOpenModal(true);
     };
 
@@ -72,7 +101,7 @@ const Main = () => {
         const result = await getAllProducts();
 
         if (isObject(result)) {
-            setProducts(result as Product[]);
+            setProducts({ ...products, products: result as Product[] });
         }
     };
 
@@ -80,7 +109,7 @@ const Main = () => {
         const result = await getAllMyProducts();
 
         if (isObject(result)) {
-            setProducts(result as Product[]);
+            setProducts({ ...products, products: result as Product[] });
         }
     };
 
@@ -96,6 +125,11 @@ const Main = () => {
             default:
                 return;
         }
+    };
+
+    const handleEditProduct = (product: Product) => {
+        setProducts({ ...products, selectedProduct: product });
+        setOpenModal(true);
     };
 
     React.useEffect(() => {
@@ -149,8 +183,8 @@ const Main = () => {
                                 <div className="h-full flex space-x-8">
                                     {navigation.categories.map((category) => (
                                         <Popover
-                                            key={category.name}
-                                            className="flex active"
+                                            key={category.name + category.id}
+                                            className="flex "
                                         >
                                             {({ open }) => (
                                                 <>
@@ -192,18 +226,22 @@ const Main = () => {
                                                                 <div className="max-w-7xl mx-auto px-8">
                                                                     <div className="grid grid-cols-1 py-16">
                                                                         <div className="grid grid-cols-3 gap-x-8 ">
-                                                                            {products.map(
+                                                                            {products.products.map(
                                                                                 (
                                                                                     item
                                                                                 ) => (
                                                                                     <div
                                                                                         key={
-                                                                                            item.name +
                                                                                             item.id
                                                                                         }
-                                                                                        className="group relative text-base sm:text-sm mb-4"
+                                                                                        className="group relative text-base sm:text-sm mb-8"
+                                                                                        onClick={() =>
+                                                                                            handleEditProduct(
+                                                                                                item
+                                                                                            )
+                                                                                        }
                                                                                     >
-                                                                                        <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden group-hover:opacity-75">
+                                                                                        <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden ">
                                                                                             <img
                                                                                                 src={
                                                                                                     item
@@ -215,37 +253,32 @@ const Main = () => {
                                                                                                 className="object-center object-cover"
                                                                                             />
                                                                                         </div>
-                                                                                        <a
-                                                                                            href={
-                                                                                                "#"
-                                                                                            }
-                                                                                            className="mt-6 block font-medium text-gray-900"
-                                                                                        >
-                                                                                            <span
-                                                                                                className="absolute z-10 inset-0"
-                                                                                                aria-hidden="true"
-                                                                                            />
-                                                                                            {
-                                                                                                item.name
-                                                                                            }
-                                                                                        </a>
-                                                                                        <p
-                                                                                            aria-hidden="true"
-                                                                                            className="mt-1"
-                                                                                        >
-                                                                                            Price:
-                                                                                            $
-                                                                                            {
-                                                                                                item.price
-                                                                                            }
-                                                                                        </p>
-                                                                                        <p
-                                                                                            aria-hidden="true"
-                                                                                            className="mt-1"
-                                                                                        >
-                                                                                            Shop
-                                                                                            now
-                                                                                        </p>
+                                                                                        <div className="text-center">
+                                                                                            <a
+                                                                                                href={
+                                                                                                    "#"
+                                                                                                }
+                                                                                                className="mt-2  block font-medium text-gray-900"
+                                                                                            >
+                                                                                                <span
+                                                                                                    className="absolute z-10 inset-0"
+                                                                                                    aria-hidden="true"
+                                                                                                />
+                                                                                                {
+                                                                                                    item.name
+                                                                                                }
+                                                                                                <p
+                                                                                                    aria-hidden="true"
+                                                                                                    className="mt-1"
+                                                                                                >
+                                                                                                    Price:
+                                                                                                    $
+                                                                                                    {
+                                                                                                        item.price
+                                                                                                    }
+                                                                                                </p>
+                                                                                            </a>
+                                                                                        </div>
                                                                                     </div>
                                                                                 )
                                                                             )}

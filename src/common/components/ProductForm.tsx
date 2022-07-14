@@ -15,6 +15,8 @@ interface AppProps {
 }
 // import { Container } from './styles';
 const ProductForm = ({ closeModal }: AppProps) => {
+    const [products, setProducts] = React.useContext(Context);
+
     const [productForm, setProductForm] = React.useState<ProductForm>({
         description: "",
         name: "",
@@ -22,21 +24,38 @@ const ProductForm = ({ closeModal }: AppProps) => {
         price: 0,
     });
 
-    const [products, setProducts] = React.useContext(Context);
-
     const handleFormSubmit = async (event: FormEvent) => {
         event.preventDefault();
         const createdProduct = await createProduct(productForm);
-        const newArrayOfProducts = [...products, createdProduct as Product];
+        const newArrayOfProducts = [
+            ...products.products,
+            createdProduct as Product,
+        ];
 
         if (!!createProduct) {
-            setProducts(newArrayOfProducts);
+            setProducts({ ...productForm, products: newArrayOfProducts });
         }
         closeModal();
     };
 
     const handleFileListToFileArray = (files: FileList) =>
         setProductForm({ ...productForm, product_photo: Array.from(files) });
+
+    const checkEditFlow = () => {
+        debugger;
+        if (products.selectedProduct) {
+            setProductForm({
+                description: products.selectedProduct.description,
+                name: products.selectedProduct.name,
+                price: products.selectedProduct.price,
+                product_photo: [],
+            });
+        }
+    };
+
+    React.useEffect(() => {
+        checkEditFlow();
+    }, []);
 
     return (
         <div className="p-2 md:mt-0 md:col-span-2">
@@ -117,6 +136,7 @@ const ProductForm = ({ closeModal }: AppProps) => {
                                 id="product-name"
                                 className=" center focus:ring-indigo-500 focus:border-indigo-500 rounded-none rounded-r-md sm:text-sm border-gray-300"
                                 placeholder="Ex: Wine..."
+                                value={productForm.name}
                                 onChange={(event) =>
                                     setProductForm({
                                         ...productForm,
@@ -139,6 +159,7 @@ const ProductForm = ({ closeModal }: AppProps) => {
                                 id="product-price"
                                 step="any"
                                 required
+                                value={productForm.price}
                                 onChange={(event) =>
                                     setProductForm({
                                         ...productForm,
@@ -161,6 +182,7 @@ const ProductForm = ({ closeModal }: AppProps) => {
                                 name="product-description"
                                 id="product-description"
                                 rows={6}
+                                value={productForm.description}
                                 onChange={(event) =>
                                     setProductForm({
                                         ...productForm,

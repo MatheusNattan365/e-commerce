@@ -45,7 +45,9 @@ export async function getAllProducts(): Promise<Product[] | boolean> {
 }
 
 export async function getAllMyProducts(): Promise<Product[] | boolean> {
-    const currentUser = JSON.parse(localStorage.getItem("devx-user") || "");
+    const currentUser = JSON.parse(
+        localStorage.getItem("devx-user") || JSON.stringify("")
+    );
 
     return fetch(
         `http://localhost:7000/api/v1/products/by-user-id/${currentUser.id}`,
