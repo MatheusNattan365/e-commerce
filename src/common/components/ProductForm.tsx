@@ -1,6 +1,9 @@
 import React, { FormEvent } from "react";
+import { Context } from "../../context/main";
+import { Product } from "../../pages/main";
+import { createProduct } from "../../services/Products";
 
-interface ProductForm {
+export interface ProductForm {
     description: string;
     name: string;
     product_photo: File[] | null;
@@ -19,9 +22,17 @@ const ProductForm = ({ closeModal }: AppProps) => {
         price: 0,
     });
 
-    const handleFormSubmit = (event: FormEvent) => {
+    const [products, setProducts] = React.useContext(Context);
+
+    const handleFormSubmit = async (event: FormEvent) => {
         event.preventDefault();
-        console.log(productForm);
+        const createdProduct = await createProduct(productForm);
+        const newArrayOfProducts = [...products, createdProduct as Product];
+
+        if (!!createProduct) {
+            setProducts(newArrayOfProducts);
+        }
+        closeModal();
     };
 
     const handleFileListToFileArray = (files: FileList) =>
@@ -32,7 +43,7 @@ const ProductForm = ({ closeModal }: AppProps) => {
             <form onSubmit={handleFormSubmit}>
                 <div className="shadow sm:rounded-md sm:overflow-hidden">
                     <div>
-                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-4 border-slate-800 border-dashed rounded-md">
+                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-400 border-dashed rounded-md">
                             <div className="space-y-1 text-center">
                                 <svg
                                     className="mx-auto h-12 w-12 text-gray-400"
@@ -56,7 +67,7 @@ const ProductForm = ({ closeModal }: AppProps) => {
                                         <span>
                                             {productForm.product_photo
                                                 ? "Change file(s)"
-                                                : "Upload a file(s)"}
+                                                : "Upload file(s)"}
                                         </span>
 
                                         <input
