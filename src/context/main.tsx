@@ -87,17 +87,8 @@ export const Provider = ({ children }: AppProps) => {
         },
     ]);
 
-    const dbProducts = async () => {
-        const result = await getAllProducts();
-
-        if (typeof result === "object" && result.length) {
-            const allProducts = [...products, ...result];
-            setProducts(allProducts);
-        }
-    };
-
     React.useEffect(() => {
-        dbProducts();
+        // dbProducts();
     }, []);
 
     return (

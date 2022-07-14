@@ -8,6 +8,7 @@ import Link from "next/link";
 import React, { Fragment, MouseEvent, useContext, useState } from "react";
 import AddProductModal from "../common/components/Modal";
 import { Context } from "../context/main";
+import { getAllMyProducts, getAllProducts } from "../services/Products";
 
 export interface User {
     email: string;
@@ -18,255 +19,11 @@ const navigation = {
         {
             id: "products",
             name: "Products",
-            featured: [
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-                    imageAlt:
-                        "Drawstring top with elastic loop closure and textured interior padding.",
-                },
-                {
-                    name: "Artwork Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-                    imageAlt:
-                        "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-                },
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-                    imageAlt:
-                        "Drawstring top with elastic loop closure and textured interior padding.",
-                },
-                {
-                    name: "Artwork Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-                    imageAlt:
-                        "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-                },
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-                    imageAlt:
-                        "Drawstring top with elastic loop closure and textured interior padding.",
-                },
-                {
-                    name: "Artwork Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-                    imageAlt:
-                        "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-                },
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-                    imageAlt:
-                        "Drawstring top with elastic loop closure and textured interior padding.",
-                },
-                {
-                    name: "Artwork Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-                    imageAlt:
-                        "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-                },
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-                    imageAlt:
-                        "Drawstring top with elastic loop closure and textured interior padding.",
-                },
-                {
-                    name: "Artwork Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-                    imageAlt:
-                        "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-                },
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-                    imageAlt:
-                        "Drawstring top with elastic loop closure and textured interior padding.",
-                },
-                {
-                    name: "Artwork Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-                    imageAlt:
-                        "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-                },
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-                    imageAlt:
-                        "Drawstring top with elastic loop closure and textured interior padding.",
-                },
-                {
-                    name: "Artwork Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-                    imageAlt:
-                        "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-                },
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-                    imageAlt:
-                        "Drawstring top with elastic loop closure and textured interior padding.",
-                },
-                {
-                    name: "Artwork Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-                    imageAlt:
-                        "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-                },
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-                    imageAlt:
-                        "Drawstring top with elastic loop closure and textured interior padding.",
-                },
-                {
-                    name: "Artwork Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-                    imageAlt:
-                        "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-                },
-            ],
-            products: [
-                {
-                    id: 1,
-                    name: "Wine - Sawmill Creek Autumn",
-                    description: "Other recurrent atlantoaxial dislocation",
-                    price: 17.75,
-                    thumbnailUrls: [
-                        `https://source.unsplash.com/random/300x300`,
-                    ],
-                },
-                {
-                    id: 2,
-                    name: "Beef Flat Iron Steak",
-                    description:
-                        "Superficial frostbite of unspecified hand, initial encounter",
-                    price: 49.71,
-                    thumbnailUrls: [
-                        "https://source.unsplash.com/random/300x300",
-                    ],
-                },
-                {
-                    id: 3,
-                    name: "Rolled Oats",
-                    description: "Acute viral hepatitis, unspecified",
-                    price: 32.69,
-                    thumbnailUrls: [
-                        "https://source.unsplash.com/random/300x300",
-                    ],
-                },
-                {
-                    id: 4,
-                    name: "Country Roll",
-                    description:
-                        "Stress fracture, unspecified hand, init encntr for fracture",
-                    price: 52.34,
-                    thumbnailUrls: [
-                        "https://source.unsplash.com/random/300x300",
-                    ],
-                },
-                {
-                    id: 5,
-                    name: "Bread Foccacia Whole",
-                    description:
-                        "2-part disp fx of surgical neck of right humerus, sequela",
-                    price: 54.35,
-                    thumbnailUrls: [
-                        "https://source.unsplash.com/random/300x300",
-                    ],
-                },
-                {
-                    id: 6,
-                    name: "Onions - Cippolini",
-                    description:
-                        "Melanocytic nevi of ear and external auricular canal",
-                    price: 97.11,
-                    thumbnailUrls: [
-                        "https://source.unsplash.com/random/300x300",
-                    ],
-                },
-                {
-                    id: 7,
-                    name: "Relish",
-                    description: "Disorder of ligament, unspecified shoulder",
-                    price: 47.56,
-                    thumbnailUrls: [
-                        "https://source.unsplash.com/random/300x300",
-                    ],
-                },
-                {
-                    id: 8,
-                    name: "Wine - Marlbourough Sauv Blanc",
-                    description: "Adverse effect of stimulant laxatives",
-                    price: 84.49,
-                    thumbnailUrls: [
-                        "https://source.unsplash.com/random/300x300",
-                    ],
-                },
-                {
-                    id: 9,
-                    name: "Lobster - Canned Premium",
-                    description: "Macular keratitis",
-                    price: 26.63,
-                    thumbnailUrls: [
-                        "https://source.unsplash.com/random/300x300",
-                    ],
-                },
-                {
-                    id: 10,
-                    name: "Southern Comfort",
-                    description:
-                        "Abrasion of right index finger, subsequent encounter",
-                    price: 40.04,
-                    thumbnailUrls: [
-                        "https://source.unsplash.com/random/300x300",
-                    ],
-                },
-            ],
-            sections: [],
         },
-    ],
-    pages: [
-        { name: "Company", href: "#" },
-        { name: "Stores", href: "#" },
+        {
+            id: "myProducts",
+            name: "My products",
+        },
     ],
 };
 
@@ -285,14 +42,9 @@ const Main = () => {
     const [open, setOpen] = useState(true);
     const [openModal, setOpenModal] = useState(false);
     const [products, setProducts] = useContext(Context);
-
     const [user, setUser] = useState<User>({
         email: "",
     });
-
-    React.useEffect(() => {
-        hasUser();
-    }, []);
 
     const hasUser = () => {
         const user = JSON.parse(
@@ -305,9 +57,51 @@ const Main = () => {
         localStorage.clear();
         setUser({ email: "" });
     };
+
     const openAddProductModal = (event: MouseEvent<Element>): void => {
         setOpenModal(true);
     };
+
+    const isObject = (param: any): boolean => {
+        if (typeof param === "object") return true;
+
+        return false;
+    };
+
+    const showAllProducts = async () => {
+        const result = await getAllProducts();
+
+        if (isObject(result)) {
+            setProducts(result as Product[]);
+        }
+    };
+
+    const showOnlyMyProducts = async (): Promise<void> => {
+        const result = await getAllMyProducts();
+
+        if (isObject(result)) {
+            setProducts(result as Product[]);
+        }
+    };
+
+    const handleSelectedCategory = (name: string): void => {
+        switch (name) {
+            case "Products":
+                showAllProducts();
+                return;
+            case "My products":
+                showOnlyMyProducts();
+                return;
+
+            default:
+                return;
+        }
+    };
+
+    React.useEffect(() => {
+        hasUser();
+    }, []);
+
     return (
         <div className="bg-white">
             <AddProductModal
@@ -355,7 +149,7 @@ const Main = () => {
                                 <div className="h-full flex space-x-8">
                                     {navigation.categories.map((category) => (
                                         <Popover
-                                            key={category.name + category.id}
+                                            key={category.name}
                                             className="flex active"
                                         >
                                             {({ open }) => (
@@ -368,6 +162,11 @@ const Main = () => {
                                                                     : "border-transparent text-gray-700 hover:text-gray-800",
                                                                 "relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px"
                                                             )}
+                                                            onClick={() =>
+                                                                handleSelectedCategory(
+                                                                    category.name
+                                                                )
+                                                            }
                                                         >
                                                             {category.name}
                                                         </Popover.Button>
@@ -388,21 +187,77 @@ const Main = () => {
                                                                 className="absolute inset-0 top-1/2 bg-white shadow"
                                                                 aria-hidden="true"
                                                             />
+
+                                                            <div className="relative bg-slate-50">
+                                                                <div className="max-w-7xl mx-auto px-8">
+                                                                    <div className="grid grid-cols-1 py-16">
+                                                                        <div className="grid grid-cols-3 gap-x-8 ">
+                                                                            {products.map(
+                                                                                (
+                                                                                    item
+                                                                                ) => (
+                                                                                    <div
+                                                                                        key={
+                                                                                            item.name +
+                                                                                            item.id
+                                                                                        }
+                                                                                        className="group relative text-base sm:text-sm mb-4"
+                                                                                    >
+                                                                                        <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden group-hover:opacity-75">
+                                                                                            <img
+                                                                                                src={
+                                                                                                    item
+                                                                                                        .thumbnailUrls[0]
+                                                                                                }
+                                                                                                alt={
+                                                                                                    "item.imageAlt"
+                                                                                                }
+                                                                                                className="object-center object-cover"
+                                                                                            />
+                                                                                        </div>
+                                                                                        <a
+                                                                                            href={
+                                                                                                "#"
+                                                                                            }
+                                                                                            className="mt-6 block font-medium text-gray-900"
+                                                                                        >
+                                                                                            <span
+                                                                                                className="absolute z-10 inset-0"
+                                                                                                aria-hidden="true"
+                                                                                            />
+                                                                                            {
+                                                                                                item.name
+                                                                                            }
+                                                                                        </a>
+                                                                                        <p
+                                                                                            aria-hidden="true"
+                                                                                            className="mt-1"
+                                                                                        >
+                                                                                            Price:
+                                                                                            $
+                                                                                            {
+                                                                                                item.price
+                                                                                            }
+                                                                                        </p>
+                                                                                        <p
+                                                                                            aria-hidden="true"
+                                                                                            className="mt-1"
+                                                                                        >
+                                                                                            Shop
+                                                                                            now
+                                                                                        </p>
+                                                                                    </div>
+                                                                                )
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </Popover.Panel>
                                                     </Transition>
                                                 </>
                                             )}
                                         </Popover>
-                                    ))}
-
-                                    {navigation.pages.map((page) => (
-                                        <a
-                                            key={page.name + page.href}
-                                            href={page.href}
-                                            className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                                        >
-                                            {page.name}
-                                        </a>
                                     ))}
                                 </div>
                             </Popover.Group>
@@ -509,45 +364,6 @@ const Main = () => {
                     </div>
                 </nav>
             </header>
-
-            <div className="relative bg-white">
-                <div className="max-w-7xl mx-auto px-8">
-                    <div className="grid grid-cols-1 py-16">
-                        <div className="grid grid-cols-3 gap-x-8 ">
-                            {products.map((item) => (
-                                <div
-                                    key={item.name + item.id}
-                                    className="group relative text-base sm:text-sm mb-4"
-                                >
-                                    <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden group-hover:opacity-75">
-                                        <img
-                                            src={item.thumbnailUrls[0]}
-                                            alt={"item.imageAlt"}
-                                            className="object-center object-cover"
-                                        />
-                                    </div>
-                                    <a
-                                        href={"#"}
-                                        className="mt-6 block font-medium text-gray-900"
-                                    >
-                                        <span
-                                            className="absolute z-10 inset-0"
-                                            aria-hidden="true"
-                                        />
-                                        {item.name}
-                                    </a>
-                                    <p aria-hidden="true" className="mt-1">
-                                        Price: ${item.price}
-                                    </p>
-                                    <p aria-hidden="true" className="mt-1">
-                                        Shop now
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 };

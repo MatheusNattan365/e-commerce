@@ -43,3 +43,19 @@ export async function getAllProducts(): Promise<Product[] | boolean> {
             return false;
         });
 }
+
+export async function getAllMyProducts(): Promise<Product[] | boolean> {
+    const currentUser = JSON.parse(localStorage.getItem("devx-user") || "");
+
+    return fetch(
+        `http://localhost:7000/api/v1/products/by-user-id/${currentUser.id}`,
+        {
+            method: "GET",
+        }
+    )
+        .then((res) => res.json())
+        .catch((err) => {
+            alert(err);
+            return false;
+        });
+}
